@@ -30,7 +30,6 @@ t_error	ft_start_eating(t_philo *philo)
 {
 	const t_usize	time = ft_time() - philo->start_time;
 
-	printf("\n\nOn as au pheno ?\n\n");
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->l_fork);

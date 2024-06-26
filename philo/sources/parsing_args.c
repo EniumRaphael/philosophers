@@ -54,7 +54,7 @@ t_usize	ft_time(void)
 
 	if (gettimeofday(&time, NULL) == -1)
 		ft_exit("Error of during ft_time !\n", 1);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+	return (time.tv_sec * 1000 + time.tv_usec * 0.001);
 }
 
 void	ft_pause(size_t milliseconds)
@@ -76,11 +76,11 @@ t_error	ft_init_philo(t_i32 argc, t_str *argv, t_program *prog, t_mutex *forks)
 		prog->philos[i].eating = 0;
 		ft_parsing_args(argc, argv, &prog->philos[i]);
 		prog->philos[i].start_time = ft_time();
-		prog->philos[i].t_last_eat = ft_time();
+		prog->philos[i].t_last_eat = 0;
 		prog->philos[i].print_lock = &prog->print_lock;
 		prog->philos[i].dead_lock = &prog->dead_lock;
 		prog->philos[i].meal_lock = &prog->meal_lock;
-		prog->philos[i].dead_check = &prog->dead_flag;
+		prog->philos[i].dead_check = false;
 		prog->philos[i].check_eating_count = &prog->check_eating_count;
 		prog->philos[i].l_fork = &forks[i];
 		if (i == 0)

@@ -49,7 +49,7 @@ typedef struct s_philo
 	t_i32		eating_count;
 	t_usize		t_last_eat;
 	t_usize		start_time;
-	t_i32		*dead_check;
+	t_bool		dead_check;
 	t_mutex		*check_eating_count;
 	t_mutex		*r_fork;
 	t_mutex		*l_fork;

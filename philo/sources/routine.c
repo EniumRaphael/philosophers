@@ -15,7 +15,7 @@
 t_bool	dead_loop(t_philo *philo)
 {
 	pthread_mutex_lock(philo->dead_lock);
-	if (*philo->dead_check == true)
+	if (philo[0].dead_check == true)
 		return (pthread_mutex_unlock(philo->dead_lock), true);
 	pthread_mutex_unlock(philo->dead_lock);
 	return (false);
@@ -24,18 +24,23 @@ t_bool	dead_loop(t_philo *philo)
 t_bool	check_dead(t_philo *philo)
 {
 	t_usize	i;
+	t_usize timecheck;
 
 	i = 0;
 	while (i < philo[0].nb_philo)
 	{
-		if (ft_time() - philo[i].t_last_eat > philo[i].t_eat)
+		timecheck = ft_time() - philo[i].start_time - philo[i].t_last_eat;
+		if (philo[i].t_last_eat != 0 && timecheck >= philo[i].t_death)
+		{
+			ft_logs("died\n", &philo[i]);
 			return (true);
+		}
 		i++;
 	}
 	return (false);
 }
 
-t_bool	check_eat(t_philo *philo)
+t_bool	check_eat(t_philo *philo)	
 {
 	t_usize	i;
 	t_u8	check;
@@ -47,14 +52,23 @@ t_bool	check_eat(t_philo *philo)
 	while (i < philo[0].nb_philo)
 	{
 		pthread_mutex_lock(philo[i].check_eating_count);
-		printf("\n\n\n		eating_time for philo n%d = %d\n\n\n", philo[i].id, philo[i].eating_count);
 		if (philo[i].eating_count >= philo[i].nb_eat)
 			check++;
 		pthread_mutex_unlock(philo[i].check_eating_count);
 		i++;
 	}
+	i = 0;
 	if (check == philo[0].nb_philo)
+	{
+		pthread_mutex_lock(philo[0].dead_lock);
+		while (i < philo[0].nb_philo)
+		{
+			philo[i].dead_check = true;
+			i++;
+		}
+		pthread_mutex_unlock(philo[0].dead_lock);
 		return (true);
+	}
 	return (false);
 }
 
@@ -67,9 +81,9 @@ void	*ft_watch_dogs(void *ptr)
 		return (NULL);
 	while (true)
 	{
-		if (check_dead(philo) == true)
-			break ;
 		if (check_eat(philo) == true)
+			break ;
+		if (check_dead(philo) == true)
 			break ;
 	}
 	return (philo);
@@ -97,7 +111,6 @@ t_error	ft_init_thread(t_program *prog, t_mutex *forks)
 	t_usize		i;
 
 	i = 0;
-	ft_logs("garfi lpb\n", prog->philos);
 	if (pthread_create(&o_block, NULL, &ft_watch_dogs, prog->philos))
 		ft_destroy_exit("Allocation of watch_dogs failed\n", \
 			ERROR, prog, forks);
@@ -109,8 +122,8 @@ t_error	ft_init_thread(t_program *prog, t_mutex *forks)
 					ERROR, prog, forks);
 		i++;
 	}
-	pthread_join(o_block, NULL);
 	while (--i > 0)
 		pthread_join(prog->philos[i].thread, NULL);
+	pthread_join(o_block, NULL);
 	return (NO_ERROR);
 }
