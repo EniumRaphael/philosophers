@@ -6,7 +6,7 @@
 #    By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/12 11:05:05 by rparodi           #+#    #+#              #
-#    Updated: 2024/06/16 12:23:39 by rparodi          ###   ########.fr        #
+#    Updated: 2024/06/26 17:25:08 by rparodi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -120,3 +120,4 @@ footer:
 .PHONY: all bonus clean fclean re
 
 -include	${OBJ:.o=.d}
+

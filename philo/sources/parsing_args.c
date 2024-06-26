@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:42:37 by rparodi           #+#    #+#             */
-/*   Updated: 2024/06/18 15:09:06 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/06/26 17:16:09 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ t_error	ft_init_philo(t_i32 argc, t_str *argv, t_program *prog, t_mutex *forks)
 		prog->philos[i].dead_lock = &prog->dead_lock;
 		prog->philos[i].meal_lock = &prog->meal_lock;
 		prog->philos[i].dead_check = &prog->dead_flag;
+		prog->philos[i].check_eating_count = &prog->check_eating_count;
 		prog->philos[i].l_fork = &forks[i];
 		if (i == 0)
 			prog->philos[i].r_fork = &forks[prog->philos[i].nb_philo - 1];
@@ -100,8 +101,9 @@ t_error	ft_init(t_i32 argc, t_str *argv, t_program *prog, t_philo *philo)
 	pthread_mutex_init(&prog->print_lock, NULL);
 	pthread_mutex_init(&prog->dead_lock, NULL);
 	pthread_mutex_init(&prog->meal_lock, NULL);
+	pthread_mutex_init(&prog->check_eating_count, NULL);
 	prog->philos = philo;
-	prog->dead_flag = 0;
+	prog->dead_flag = false;
 	if (ft_init_philo(argc, argv, prog, forks))
 		return (ERROR);
 	if (philo->nb_philo != 0 && philo->nb_philo > MAXSUPPORT)

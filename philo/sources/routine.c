@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 11:42:31 by rparodi           #+#    #+#             */
-/*   Updated: 2024/06/20 15:04:13 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/06/26 17:23:11 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ t_bool	check_dead(t_philo *philo)
 	{
 		if (ft_time() - philo[i].t_last_eat > philo[i].t_eat)
 			return (true);
+		i++;
 	}
-	i++;
 	return (false);
 }
 
@@ -46,8 +46,11 @@ t_bool	check_eat(t_philo *philo)
 		return (false);
 	while (i < philo[0].nb_philo)
 	{
+		pthread_mutex_lock(philo[i].check_eating_count);
+		printf("\n\n\n		eating_time for philo n%d = %d\n\n\n", philo[i].id, philo[i].eating_count);
 		if (philo[i].eating_count >= philo[i].nb_eat)
 			check++;
+		pthread_mutex_unlock(philo[i].check_eating_count);
 		i++;
 	}
 	if (check == philo[0].nb_philo)
@@ -64,9 +67,9 @@ void	*ft_watch_dogs(void *ptr)
 		return (NULL);
 	while (true)
 	{
-		if (check_dead(philo))
+		if (check_dead(philo) == true)
 			break ;
-		if (check_eat(philo))
+		if (check_eat(philo) == true)
 			break ;
 	}
 	return (philo);
@@ -94,6 +97,7 @@ t_error	ft_init_thread(t_program *prog, t_mutex *forks)
 	t_usize		i;
 
 	i = 0;
+	ft_logs("garfi lpb\n", prog->philos);
 	if (pthread_create(&o_block, NULL, &ft_watch_dogs, prog->philos))
 		ft_destroy_exit("Allocation of watch_dogs failed\n", \
 			ERROR, prog, forks);

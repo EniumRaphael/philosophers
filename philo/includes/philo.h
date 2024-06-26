@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:34:04 by rparodi           #+#    #+#             */
-/*   Updated: 2024/06/17 14:12:53 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/06/26 17:15:16 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,6 @@
 #  define MAXSUPPORT 200
 # endif
 
-# ifndef EATTIME
-#  define EATTIME 3
-# endif
-
 typedef struct s_philo
 {
 	t_usize		nb_philo;
@@ -54,6 +50,7 @@ typedef struct s_philo
 	t_usize		t_last_eat;
 	t_usize		start_time;
 	t_i32		*dead_check;
+	t_mutex		*check_eating_count;
 	t_mutex		*r_fork;
 	t_mutex		*l_fork;
 	t_mutex		*print_lock;
@@ -67,6 +64,7 @@ typedef struct s_program
 	t_mutex	dead_lock;
 	t_mutex	meal_lock;
 	t_mutex	print_lock;
+	t_mutex	check_eating_count;
 	t_philo	*philos;
 }			t_program;
 

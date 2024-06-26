@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:23:09 by rparodi           #+#    #+#             */
-/*   Updated: 2024/06/18 15:50:49 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/06/26 17:24:47 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_error	ft_start_eating(t_philo *philo)
 {
 	const t_usize	time = ft_time() - philo->start_time;
 
+	printf("\n\nOn as au pheno ?\n\n");
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->l_fork);
@@ -47,8 +48,10 @@ t_error	ft_start_eating(t_philo *philo)
 	philo->eating = true;
 	ft_logs("is eating\n", philo);
 	philo->t_last_eat = time;
+	pthread_mutex_lock(philo->check_eating_count);
 	philo->eating_count++;
-	ft_pause(EATTIME * 1000);
+	pthread_mutex_unlock(philo->check_eating_count);
+	ft_pause(philo->t_eat);
 	pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_unlock(philo->l_fork);
 	philo->eating = false;
