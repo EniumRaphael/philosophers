@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:42:37 by rparodi           #+#    #+#             */
-/*   Updated: 2024/06/26 17:16:09 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/04 11:52:27 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,6 @@ t_error	ft_init_fork(t_philo *philo, t_mutex *fork)
 	return (NO_ERROR);
 }
 
-t_usize	ft_time(void)
-{
-	struct timeval	time;
-
-	if (gettimeofday(&time, NULL) == -1)
-		ft_exit("Error of during ft_time !\n", 1);
-	return (time.tv_sec * 1000 + time.tv_usec * 0.001);
-}
-
 void	ft_pause(size_t milliseconds)
 {
 	const t_usize	start = ft_time();
@@ -96,7 +87,7 @@ t_error	ft_init_philo(t_i32 argc, t_str *argv, t_program *prog, t_mutex *forks)
 
 t_error	ft_init(t_i32 argc, t_str *argv, t_program *prog, t_philo *philo)
 {
-	static t_mutex	forks[MAXSUPPORT] = { 0 };
+	static t_mutex	forks[MAXSUPPORT] = {0};
 
 	pthread_mutex_init(&prog->print_lock, NULL);
 	pthread_mutex_init(&prog->dead_lock, NULL);

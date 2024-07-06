@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 11:42:31 by rparodi           #+#    #+#             */
-/*   Updated: 2024/06/26 17:23:11 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/04 13:29:39 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_bool	dead_loop(t_philo *philo)
 t_bool	check_dead(t_philo *philo)
 {
 	t_usize	i;
-	t_usize timecheck;
+	t_usize	timecheck;
 
 	i = 0;
 	while (i < philo[0].nb_philo)
@@ -32,7 +32,10 @@ t_bool	check_dead(t_philo *philo)
 		timecheck = ft_time() - philo[i].start_time - philo[i].t_last_eat;
 		if (philo[i].t_last_eat != 0 && timecheck >= philo[i].t_death)
 		{
+			pthread_mutex_unlock(philo[i].dead_lock);
 			ft_logs("died\n", &philo[i]);
+			philo[i].dead_check = true;
+			pthread_mutex_lock(philo[i].dead_lock);
 			return (true);
 		}
 		i++;
@@ -40,7 +43,22 @@ t_bool	check_dead(t_philo *philo)
 	return (false);
 }
 
-t_bool	check_eat(t_philo *philo)	
+void	counting_launch(t_philo *philo, t_u8 *counter)
+{
+	t_usize	i;
+
+	i = 0;
+	while (i < philo[0].nb_philo)
+	{
+		pthread_mutex_lock(philo[i].check_eating_count);
+		if (philo[i].eating_count >= philo[i].nb_eat)
+			(*counter)++;
+		pthread_mutex_unlock(philo[i].check_eating_count);
+		i++;
+	}
+}
+
+t_bool	check_eat(t_philo *philo)
 {
 	t_usize	i;
 	t_u8	check;
@@ -49,21 +67,15 @@ t_bool	check_eat(t_philo *philo)
 	check = 0;
 	if (philo[0].nb_eat == -1)
 		return (false);
-	while (i < philo[0].nb_philo)
-	{
-		pthread_mutex_lock(philo[i].check_eating_count);
-		if (philo[i].eating_count >= philo[i].nb_eat)
-			check++;
-		pthread_mutex_unlock(philo[i].check_eating_count);
-		i++;
-	}
-	i = 0;
+	counting_launch(philo, &check);
 	if (check == philo[0].nb_philo)
 	{
 		pthread_mutex_lock(philo[0].dead_lock);
 		while (i < philo[0].nb_philo)
 		{
+			pthread_mutex_unlock(philo[i].dead_lock);
 			philo[i].dead_check = true;
+			pthread_mutex_lock(philo[i].dead_lock);
 			i++;
 		}
 		pthread_mutex_unlock(philo[0].dead_lock);
@@ -87,43 +99,4 @@ void	*ft_watch_dogs(void *ptr)
 			break ;
 	}
 	return (philo);
-}
-
-void	*ft_routine(void *ptr)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *) ptr;
-	if (philo == NULL)
-		return (NULL);
-	while (!dead_loop(philo))
-	{
-		ft_start_eating(philo);
-		ft_sleeping(philo);
-		ft_thinking(philo);
-	}
-	return (philo);
-}
-
-t_error	ft_init_thread(t_program *prog, t_mutex *forks)
-{
-	t_thread	o_block;
-	t_usize		i;
-
-	i = 0;
-	if (pthread_create(&o_block, NULL, &ft_watch_dogs, prog->philos))
-		ft_destroy_exit("Allocation of watch_dogs failed\n", \
-			ERROR, prog, forks);
-	while (i < prog->philos[0].nb_philo)
-	{
-		if (pthread_create(&prog->philos[i].thread, NULL, &ft_routine, \
-					&prog->philos[i]))
-			ft_destroy_exit("Allocation of one philo thread failed !\n", \
-					ERROR, prog, forks);
-		i++;
-	}
-	while (--i > 0)
-		pthread_join(prog->philos[i].thread, NULL);
-	pthread_join(o_block, NULL);
-	return (NO_ERROR);
 }

@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:23:09 by rparodi           #+#    #+#             */
-/*   Updated: 2024/06/26 17:24:47 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/04 11:48:33 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	ft_logs(t_str msg, t_philo *philo)
 	const t_usize	time = ft_time() - philo->start_time;
 
 	if (msg != NULL)
-		printf("%s%zu %s%i %s%s%s", BLUE, time, GOLD, philo->id, GREEN, msg, END);
+		printf("%s%zu %s%i %s%s%s", BLUE, time, GOLD, philo->id, \
+				GREEN, msg, END);
 }
 
 t_error	ft_thinking(t_philo *philo)
@@ -28,8 +29,6 @@ t_error	ft_thinking(t_philo *philo)
 
 t_error	ft_start_eating(t_philo *philo)
 {
-	const t_usize	time = ft_time() - philo->start_time;
-
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->l_fork);
@@ -44,6 +43,13 @@ t_error	ft_start_eating(t_philo *philo)
 		pthread_mutex_lock(philo->l_fork);
 		ft_logs("has taken a fork\n", philo);
 	}
+	return (ft_ending_eating(philo));
+}
+
+t_error	ft_ending_eating(t_philo *philo)
+{
+	const t_usize	time = ft_time() - philo->start_time;
+
 	philo->eating = true;
 	ft_logs("is eating\n", philo);
 	philo->t_last_eat = time;
