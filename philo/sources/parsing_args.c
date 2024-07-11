@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:42:37 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/04 11:52:27 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/11 17:31:53 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_error	ft_parsing_args(t_i32 argc, t_str *argv, t_philo *philo)
 		philo->nb_eat = tmp;
 	}
 	else
-		philo->t_eat = -1;
+		philo->t_eat = ~0;
 	ft_atou(argv[1], &tmp);
 	philo->nb_philo = tmp;
 	ft_atou(argv[2], &tmp);

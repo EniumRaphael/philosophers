@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:30:25 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/04 15:27:12 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/11 17:34:21 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ void	*ft_routine(void *ptr)
 	philo = (t_philo *) ptr;
 	if (philo == NULL)
 		return (NULL);
+	pthread_mutex_lock(philo->print_lock);
+	printf("\n\nEntre dans ft_routine\n\n");
+	pthread_mutex_unlock(philo->print_lock);
 	while (!dead_loop(philo))
 	{
 		ft_start_eating(philo);
@@ -30,11 +33,11 @@ void	*ft_routine(void *ptr)
 
 t_error	ft_init_thread(t_program *prog, t_mutex *forks)
 {
-	t_thread	o_block;
+	t_thread	watch_dogs;
 	t_usize		i;
 
 	i = 0;
-	if (pthread_create(&o_block, NULL, &ft_watch_dogs, prog->philos))
+	if (pthread_create(&watch_dogs, NULL, &ft_watch_dogs, prog->philos))
 		ft_destroy_exit("Allocation of watch_dogs failed\n", \
 			ERROR, prog, forks);
 	while (i < prog->philos[0].nb_philo)
@@ -47,7 +50,7 @@ t_error	ft_init_thread(t_program *prog, t_mutex *forks)
 	}
 	while (--i > 0)
 		pthread_join(prog->philos[i].thread, NULL);
-	pthread_join(o_block, NULL);
+	pthread_join(watch_dogs, NULL);
 	return (NO_ERROR);
 }
 
@@ -64,9 +67,23 @@ t_i32	main(t_i32 argc, t_str *argv)
 {
 	t_philo		philo[MAXSUPPORT];
 	t_program	prog;
+	t_i32		i;
+	t_i32		j;
 
+	j = 1;
 	if (argc != 6 && argc != 5)
 		ft_exit(ARGS, 1);
+	while (j < argc)
+	{
+		i = 0;
+		while (argv[j][i] != '\0')
+		{
+			if (argv[j][i] < '0' || argv[j][i] > '9')
+				ft_exit("I have to take only numeric arguments !\n", 1);
+			i++;
+		}
+		j++;
+	}
 	if (ft_atou_return(argv[1]) > MAXSUPPORT)
 		ft_exit("Please update the max support !\n", 1);
 	if (ft_init(argc, argv, &prog, philo))

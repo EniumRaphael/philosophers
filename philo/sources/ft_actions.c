@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:23:09 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/04 11:48:33 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/07 20:00:00 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 
 void	ft_logs(t_str msg, t_philo *philo)
 {
+	pthread_mutex_lock(philo->print_lock);
 	const t_usize	time = ft_time() - philo->start_time;
-
 	if (msg != NULL)
+	{
 		printf("%s%zu %s%i %s%s%s", BLUE, time, GOLD, philo->id, \
-				GREEN, msg, END);
+			GREEN, msg, END);
+	}
+	pthread_mutex_unlock(philo->print_lock);
 }
 
 t_error	ft_thinking(t_philo *philo)
