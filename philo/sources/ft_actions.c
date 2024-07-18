@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:23:09 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/07 20:00:00 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/18 18:42:02 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 void	ft_logs(t_str msg, t_philo *philo)
 {
+	pthread_mutex_lock(philo->dead_lock);
+	if (philo->dead_check == true)
+		return ((void) pthread_mutex_unlock(philo->dead_lock));
+	pthread_mutex_unlock(philo->dead_lock);
 	pthread_mutex_lock(philo->print_lock);
 	const t_usize	time = ft_time() - philo->start_time;
 	if (msg != NULL)
@@ -34,16 +38,16 @@ t_error	ft_start_eating(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 	{
-		pthread_mutex_lock(philo->l_fork);
-		ft_logs("has taken a fork\n", philo);
 		pthread_mutex_lock(philo->r_fork);
+		ft_logs("has taken a fork\n", philo);
+		pthread_mutex_lock(philo->l_fork);
 		ft_logs("has taken a fork\n", philo);
 	}
 	else
 	{
-		pthread_mutex_lock(philo->r_fork);
-		ft_logs("has taken a fork\n", philo);
 		pthread_mutex_lock(philo->l_fork);
+		ft_logs("has taken a fork\n", philo);
+		pthread_mutex_lock(philo->r_fork);
 		ft_logs("has taken a fork\n", philo);
 	}
 	return (ft_ending_eating(philo));
