@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 11:42:31 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/18 18:38:04 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/18 21:18:49 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,11 @@ void	*ft_watch_dogs(void *ptr)
 {
 	t_philo	*philo;
 	t_usize	i;
-	
+
 	philo = (t_philo *) ptr;
 	if (philo == NULL)
 		return (NULL);
 	i = philo[0].nb_philo;
-	pthread_mutex_lock(philo->print_lock);
-	printf("\n\nEntre dans ft_watch_dogs\n\n");
-	pthread_mutex_unlock(philo->print_lock);
 	while (true)
 	{
 		if (check_eat(philo) == true)
@@ -93,14 +90,11 @@ void	*ft_watch_dogs(void *ptr)
 		if (check_dead(philo) == true)
 			break ;
 	}
-	pthread_mutex_lock(philo->print_lock);
-	printf("\n\nSortie de ft_watch_dogs\n\n");
-	pthread_mutex_unlock(philo->print_lock);
 	while (i-- != 0)
 	{
-			pthread_mutex_lock(philo[i].dead_lock);
-			philo[i].dead_check = true;
-			pthread_mutex_unlock(philo[i].dead_lock);
-	}		
+		pthread_mutex_lock(philo[i].dead_lock);
+		philo[i].dead_check = true;
+		pthread_mutex_unlock(philo[i].dead_lock);
+	}
 	return (philo);
 }

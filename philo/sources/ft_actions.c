@@ -6,21 +6,22 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:23:09 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/18 19:29:14 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/18 21:11:30 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-#include <pthread.h>
 
 void	ft_logs(t_str msg, t_philo *philo)
 {
+	t_usize	time;
+
 	pthread_mutex_lock(philo->dead_lock);
 	if (philo->dead_check == true)
 		return ((void) pthread_mutex_unlock(philo->dead_lock));
 	pthread_mutex_unlock(philo->dead_lock);
 	pthread_mutex_lock(philo->print_lock);
-	const t_usize	time = ft_time() - philo->start_time;
+	time = ft_time() - philo->start_time;
 	if (msg != NULL)
 	{
 		printf("%s%zu %s%i %s%s%s", BLUE, time, GOLD, philo->id, \

@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:30:25 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/18 19:59:24 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/18 21:07:01 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,6 @@ void	*ft_routine(void *ptr)
 	philo = (t_philo *) ptr;
 	if (philo == NULL)
 		return (NULL);
-	pthread_mutex_lock(philo->print_lock);
-	printf("\n\nEntre dans ft_routine\n\n");
-	pthread_mutex_unlock(philo->print_lock);
 	while (!dead_loop(philo))
 	{
 		ft_start_eating(philo);
