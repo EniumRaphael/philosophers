@@ -6,11 +6,12 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:23:09 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/18 18:42:02 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/18 19:29:14 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+#include <pthread.h>
 
 void	ft_logs(t_str msg, t_philo *philo)
 {
@@ -47,6 +48,8 @@ t_error	ft_start_eating(t_philo *philo)
 	{
 		pthread_mutex_lock(philo->l_fork);
 		ft_logs("has taken a fork\n", philo);
+		if (philo->nb_philo == 1)
+			return ((void)pthread_mutex_unlock(philo->l_fork), NO_ERROR);
 		pthread_mutex_lock(philo->r_fork);
 		ft_logs("has taken a fork\n", philo);
 	}
@@ -59,7 +62,9 @@ t_error	ft_ending_eating(t_philo *philo)
 
 	philo->eating = true;
 	ft_logs("is eating\n", philo);
+	pthread_mutex_lock(philo->meal_lock);
 	philo->t_last_eat = time;
+	pthread_mutex_unlock(philo->meal_lock);
 	pthread_mutex_lock(philo->check_eating_count);
 	philo->eating_count++;
 	pthread_mutex_unlock(philo->check_eating_count);

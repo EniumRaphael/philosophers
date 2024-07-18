@@ -6,7 +6,7 @@
 #    By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/12 11:05:05 by rparodi           #+#    #+#              #
-#    Updated: 2024/07/04 15:20:22 by rparodi          ###   ########.fr        #
+#    Updated: 2024/07/18 18:51:45 by rparodi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,8 @@ RM = rm -rf
 
 # Flags
 CFLAGS = -Werror -Wextra -Wall -Wno-unused-command-line-argument -g3 -MMD
+
+# CFLAGS += -fsanitize=thread
 
 INCLUDES =	./includes/philo.h \
 			./includes/types.h

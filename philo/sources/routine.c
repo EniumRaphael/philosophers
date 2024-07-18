@@ -29,15 +29,18 @@ t_bool	check_dead(t_philo *philo)
 	i = 0;
 	while (i < philo[0].nb_philo)
 	{
+		pthread_mutex_lock(philo->meal_lock);
 		timecheck = ft_time() - philo[i].start_time - philo[i].t_last_eat;
-		if (philo[i].t_last_eat != 0 && timecheck >= philo[i].t_death)
+		if (timecheck >= philo[i].t_death)
 		{
-			pthread_mutex_lock(philo[i].dead_lock);
+			pthread_mutex_unlock(philo->meal_lock);
 			ft_logs("died\n", &philo[i]);
+			pthread_mutex_lock(philo[i].dead_lock);
 			philo[i].dead_check = true;
 			pthread_mutex_unlock(philo[i].dead_lock);
 			return (true);
 		}
+		pthread_mutex_unlock(philo->meal_lock);
 		i++;
 	}
 	return (false);

@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:42:37 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/18 18:37:43 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/18 20:00:09 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ t_error	ft_parsing_args(t_i32 argc, t_str *argv, t_philo *philo)
 	t_usize	tmp;
 
 	tmp = 0;
+	ft_atou(argv[1], &tmp);
+	if (tmp == 0)
+		return (ERROR);
 	if (argc == 6)
 	{
 		ft_atou(argv[5], &tmp);
@@ -24,7 +27,6 @@ t_error	ft_parsing_args(t_i32 argc, t_str *argv, t_philo *philo)
 	}
 	else
 		philo->nb_eat = -1;
-	ft_atou(argv[1], &tmp);
 	philo->nb_philo = tmp;
 	ft_atou(argv[2], &tmp);
 	philo->t_death = tmp;
@@ -65,6 +67,7 @@ t_error	ft_init_philo(t_i32 argc, t_str *argv, t_program *prog, t_mutex *forks)
 	{
 		prog->philos[i].id = i + 1;
 		prog->philos[i].eating = 0;
+		prog->philos[i].eating_count = 0;
 		ft_parsing_args(argc, argv, &prog->philos[i]);
 		prog->philos[i].start_time = ft_time();
 		prog->philos[i].t_last_eat = 0;

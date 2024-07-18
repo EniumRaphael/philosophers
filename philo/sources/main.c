@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:30:25 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/11 17:34:21 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/18 19:59:24 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_error	ft_init_thread(t_program *prog, t_mutex *forks)
 					ERROR, prog, forks);
 		i++;
 	}
-	while (--i > 0)
+	while (i-- > 0)
 		pthread_join(prog->philos[i].thread, NULL);
 	pthread_join(watch_dogs, NULL);
 	return (NO_ERROR);

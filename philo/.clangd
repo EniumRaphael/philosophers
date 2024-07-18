@@ -1,0 +1,5 @@
+CompilerFlags:
+  Add:
+    - "-xc"
+    - "-I/usr/include"
+    - "-I/home/rparodi/Documents/philo-perso/philo/includes"
