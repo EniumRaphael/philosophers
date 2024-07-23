@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:30:25 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/18 21:07:01 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/23 19:51:07 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,12 @@ void	*ft_routine(void *ptr)
 		return (NULL);
 	while (!dead_loop(philo))
 	{
-		ft_start_eating(philo);
-		ft_sleeping(philo);
-		ft_thinking(philo);
+		if (check_dead(philo) == false)
+			ft_start_eating(philo);
+		if (check_dead(philo) == false)
+			ft_sleeping(philo);
+		if (check_dead(philo) == false)
+			ft_thinking(philo);
 	}
 	return (philo);
 }

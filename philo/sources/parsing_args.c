@@ -6,11 +6,12 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:42:37 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/18 21:18:10 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/23 20:03:47 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+#include <pthread.h>
 
 t_error	ft_parsing_args(t_i32 argc, t_str *argv, t_philo *philo)
 {
@@ -28,7 +29,7 @@ t_error	ft_parsing_args(t_i32 argc, t_str *argv, t_philo *philo)
 		philo->nb_eat = tmp;
 	}
 	else
-		philo->nb_eat = -1;
+		philo->nb_eat = ~0u;
 	philo->nb_philo = tmp;
 	ft_atou(argv[2], &tmp);
 	philo->t_death = tmp;
@@ -92,10 +93,11 @@ t_error	ft_init(t_i32 argc, t_str *argv, t_program *prog, t_philo *philo)
 {
 	static t_mutex	forks[MAXSUPPORT] = {0};
 
-	pthread_mutex_init(&prog->print_lock, NULL);
-	pthread_mutex_init(&prog->dead_lock, NULL);
-	pthread_mutex_init(&prog->meal_lock, NULL);
-	pthread_mutex_init(&prog->check_eating_count, NULL);
+    prog->print_lock = (t_mutex)PTHREAD_MUTEX_INITIALIZER;
+    prog->dead_lock = (t_mutex)PTHREAD_MUTEX_INITIALIZER;
+    prog->meal_lock = (t_mutex)PTHREAD_MUTEX_INITIALIZER;
+    prog->check_eating_count = (t_mutex)PTHREAD_MUTEX_INITIALIZER;
+	ft_init_fork(prog->philos, forks);
 	prog->philos = philo;
 	prog->dead_flag = false;
 	if (ft_init_philo(argc, argv, prog, forks))

@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 11:42:31 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/18 21:18:49 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/23 19:49:21 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ void	counting_launch(t_philo *philo, t_u8 *counter)
 	t_usize	i;
 
 	i = 0;
-	if (philo->nb_eat == -1)
-		return ;
 	while (i < philo[0].nb_philo)
 	{
 		pthread_mutex_lock(philo[i].check_eating_count);
