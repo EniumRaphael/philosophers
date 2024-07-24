@@ -6,11 +6,12 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:23:09 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/24 14:16:00 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/24 16:09:21 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+#include <unistd.h>
 
 void	ft_logs(t_str msg, t_philo *philo)
 {
@@ -45,7 +46,7 @@ t_error	ft_start_eating(t_philo *philo)
 			usleep(50);
 		return (NO_ERROR);
 	}
-	if (philo->id % 2 == 0)
+	if (philo->id % 2 == 1)
 	{
 		pthread_mutex_lock(philo->r_fork);
 		ft_logs("has taken a fork\n", philo);
@@ -56,8 +57,6 @@ t_error	ft_start_eating(t_philo *philo)
 	{
 		pthread_mutex_lock(philo->l_fork);
 		ft_logs("has taken a fork\n", philo);
-		if (philo->nb_philo == 1)
-			return ((void)pthread_mutex_unlock(philo->l_fork), NO_ERROR);
 		pthread_mutex_lock(philo->r_fork);
 		ft_logs("has taken a fork\n", philo);
 	}

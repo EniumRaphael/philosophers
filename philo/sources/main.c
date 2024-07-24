@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:30:25 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/24 14:07:27 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/24 16:15:16 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,18 @@
 void	*ft_routine(void *ptr)
 {
 	t_philo	*philo;
+	t_usize nb_group;
 
+	nb_group = 2;
 	philo = (t_philo *) ptr;
 	if (philo == NULL)
 		return (NULL);
+	if (philo->nb_philo % 2)
+		nb_group = 3;
 	while (philo->start_time > ft_time())
 		usleep(500);
+	if (philo->id % nb_group)
+		usleep(philo->t_eat * 800);
 	while (!dead_loop(philo))
 	{
 		if (dead_loop(philo) == false)
