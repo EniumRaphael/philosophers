@@ -6,16 +6,17 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 11:42:31 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/23 19:49:21 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/24 14:07:27 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+#include <stdio.h>
 
 t_bool	dead_loop(t_philo *philo)
 {
 	pthread_mutex_lock(philo->dead_lock);
-	if (philo[0].dead_check == true)
+	if (philo->dead_check == true)
 		return (pthread_mutex_unlock(philo->dead_lock), true);
 	pthread_mutex_unlock(philo->dead_lock);
 	return (false);
@@ -80,6 +81,8 @@ void	*ft_watch_dogs(void *ptr)
 	philo = (t_philo *) ptr;
 	if (philo == NULL)
 		return (NULL);
+	while (philo[0].start_time > ft_time())
+		usleep(500);
 	i = philo[0].nb_philo;
 	while (true)
 	{

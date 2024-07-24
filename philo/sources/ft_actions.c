@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:23:09 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/18 21:11:30 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/24 14:16:00 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,13 @@ t_error	ft_thinking(t_philo *philo)
 
 t_error	ft_start_eating(t_philo *philo)
 {
+	if (philo->nb_philo == 1)
+	{
+		ft_logs("has taken a fork\n", philo);
+		while (!dead_loop(philo))
+			usleep(50);
+		return (NO_ERROR);
+	}
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->r_fork);
