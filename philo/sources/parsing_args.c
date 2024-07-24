@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:42:37 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/23 20:03:47 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/23 21:07:50 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,15 @@ t_error	ft_parsing_args(t_i32 argc, t_str *argv, t_philo *philo)
 	return (NO_ERROR);
 }
 
-t_error	ft_init_fork(t_philo *philo, t_mutex *fork)
+t_error	ft_init_fork(t_mutex *fork, t_usize nb_fork)
 {
 	t_usize	i;
 
 	i = 0;
-	while (i < philo->nb_philo)
+	while (i < nb_fork)
 	{
-		pthread_mutex_init(&fork[i], NULL);
+		printf("\tforks[%zu]\n", i + 1);
+		fork[i] = (t_mutex)PTHREAD_MUTEX_INITIALIZER;
 		i++;
 	}
 	return (NO_ERROR);
@@ -82,6 +83,7 @@ t_error	ft_init_philo(t_i32 argc, t_str *argv, t_program *prog, t_mutex *forks)
 			prog->philos[i].r_fork = &forks[prog->philos[i].nb_philo - 1];
 		else
 			prog->philos[i].r_fork = &forks[i - 1];
+		printf("\tphilo[%zu]\n", i + 1);
 		i++;
 	}
 	if (ft_parsing_args(argc, argv, prog->philos))
@@ -97,9 +99,9 @@ t_error	ft_init(t_i32 argc, t_str *argv, t_program *prog, t_philo *philo)
     prog->dead_lock = (t_mutex)PTHREAD_MUTEX_INITIALIZER;
     prog->meal_lock = (t_mutex)PTHREAD_MUTEX_INITIALIZER;
     prog->check_eating_count = (t_mutex)PTHREAD_MUTEX_INITIALIZER;
-	ft_init_fork(prog->philos, forks);
 	prog->philos = philo;
 	prog->dead_flag = false;
+	ft_init_fork(forks, ft_atou_return(argv[1]));
 	if (ft_init_philo(argc, argv, prog, forks))
 		return (ERROR);
 	if (philo->nb_philo != 0 && philo->nb_philo > MAXSUPPORT)
