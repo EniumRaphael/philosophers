@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:42:37 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/24 16:05:12 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/24 20:23:09 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,6 @@ t_error	ft_init_philo(t_i32 argc, t_str *argv, t_program *prog, t_mutex *forks)
 			prog->philos[i].r_fork = &forks[prog->philos[i].nb_philo - 1];
 		else
 			prog->philos[i].r_fork = &forks[i - 1];
-		if (prog->philos[0].nb_philo % 2 == 1 && i == prog->philos[0].nb_philo)
-		{
-			prog->philos[i].l_fork = &forks[0];
-			prog->philos[i].r_fork = &forks[i];
-		}
 		prog->philos[i].l_fork = &forks[i];
 		i++;
 	}

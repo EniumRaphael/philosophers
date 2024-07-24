@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:30:25 by rparodi           #+#    #+#             */
-/*   Updated: 2024/07/24 16:15:16 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/07/24 20:22:29 by rparodi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	*ft_routine(void *ptr)
 {
 	t_philo	*philo;
-	t_usize nb_group;
+	t_usize	nb_group;
 
 	nb_group = 2;
 	philo = (t_philo *) ptr;
